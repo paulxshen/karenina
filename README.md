@@ -1,5 +1,2 @@
-# karenina
-Multilingual AI grammar &amp; style checker API - Karenina IO
-
-Demo @ www.karenina.io
-You may request a key
+AI grammar &amp; style checker API for English and Spanish
+You may request a key from pxshen@alumni.stanford.edu
