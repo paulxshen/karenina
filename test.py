@@ -1,37 +1,24 @@
-# Paul Shen
-# www.karenina.io
-# pxshen@alumni.stanford.edu
-# 650-924-9206
-
 import requests
 import time
 
-KEY = __MY_KEY__
-l = [
-    ('我的中国文是很坏', 'zh'),
-    ('me no pueder hablars bueno espanio', 'es'),
-]
+API_URL = "https://us-central1-dauntless-loop-285816.cloudfunctions.net/f"
+key=_
 
-# supported languages: en, es, fr, 中文
-for q, lang in l:
-    # model works best between these lengths. larger texts can be split and fed in parallel
-    # assert len(q) > 50
-    assert len(q) < 500
+def query(**payload):
+    response = requests.post(API_URL,  json=payload)
+    print(response)
+    return response.json()
 
-    start = time.time()
-    # query gateway server
-    r = requests.post('https://us-central1-project-318531836785902414.cloudfunctions.net/karenina',
-                      json={
-                          'q': q,
-                          'lang': lang,
-                          'key': KEY,
-                      }).json()
-    dt = time.time() - start
-    print(f'elapsed time: {dt}')
 
-    print(r)
-    if 'error' not in r:
-        pass
-        # run precision/recall metrics on
-        # r['input']
-        # r['output']
+query(action='start',key=key)
+print('server starting in 40s...')
+time.sleep(40)
+
+output=query(q='me no pueder hablars bueno espanio',action='correct',lang='es',key=key)
+print(output)
+# {'old': 'me no pueder hablars bueno espanio', 'new': 'No puedo hablar bien español.', 'corrections': [{'start': 0, 'end': 20, 'old': 'me no pueder hablars', 'new': 'No puedo'}, {'start': 21, 'end': 34, 'old': 'bueno espanio', 'new': 'hablar bien español.'}]}
+
+output=query(q='me wanna talk english good',action='correct',lang='en',key=key)
+print(output)
+# {'old': 'me wanna talk english good', 'new': 'I want to speak English well.', 'corrections': [{'start': 0, 'end': 13, 'old': 'me wanna talk', 'new': 'I want to speak'}, {'start': 14, 'end': 21, 'old': 'english', 'new': 'English'}, {'start': 22, 'end': 26, 'old': 'good', 'new': 'well.'}]}
+
